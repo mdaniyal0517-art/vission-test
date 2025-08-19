@@ -6,40 +6,27 @@ interface IshiharaSvgPlateProps {
 }
 
 const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, size = 250 }) => {
-  const numDots = 800; // Increased number of dots for even more visual noise
-  const minDotRadius = 1.0;
-  const maxDotRadius = 4.5; // Wider range for dot sizes
+  const numDots = 1000; // Increased number of dots for even more visual noise
+  const minDotRadius = 0.8; // Slightly smaller min radius
+  const maxDotRadius = 4.0; // Slightly smaller max radius, to make dots less distinct
 
   // Even more ambiguous color palette, focusing on greens, yellows, and browns that are easily confused
-  const colors = [
+  // These colors are chosen to be very close in perceived lightness and saturation for color-deficient vision
+  const commonColors = [
     '#808000', // Olive
     '#6B8E23', // Olive Drab
     '#556B2F', // Dark Olive Green
-    '#9ACD32', // Yellow Green
-    '#ADFF2F', // Green Yellow
     '#DAA520', // Goldenrod
     '#B8860B', // Dark Goldenrod
-    '#CD5C5C', // Indian Red (subtle inclusion for red-green confusion)
-    '#A52A2A', // Brown (subtle inclusion)
-    '#F0E68C', // Khaki
-    '#EEE8AA', // Pale Goldenrod
-    '#BDB76B', // Dark Khaki
-  ];
-
-  // For the number, pick colors that are designed to blend almost perfectly with the background
-  const numberTextColors = [
-    '#808000', // Olive
-    '#6B8E23', // Olive Drab
-    '#DAA520', // Goldenrod
-    '#B8860B', // Dark Goldenrod
-    '#CD5C5C', // Indian Red
     '#A52A2A', // Brown
+    '#BDB76B', // Dark Khaki
+    '#9ACD32', // Yellow Green (slightly desaturated)
+    '#CD5C5C', // Indian Red (desaturated)
   ];
 
   const getRandomPosition = (max: number) => Math.random() * max;
   const getRandomDotRadius = () => minDotRadius + Math.random() * (maxDotRadius - minDotRadius);
-  const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
-  const getRandomNumberTextColor = () => numberTextColors[Math.floor(Math.random() * numberTextColors.length)];
+  const getRandomColor = () => commonColors[Math.floor(Math.random() * commonColors.length)];
 
   return (
     <svg
@@ -50,7 +37,7 @@ const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, si
     >
       <defs>
         <filter id="blurFilter">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="1.0" /> {/* Slightly increased blur */}
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" /> {/* Increased blur */}
         </filter>
       </defs>
       {/* Background dots - filling the entire circle */}
@@ -72,7 +59,7 @@ const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, si
         textAnchor="middle"
         fontSize={size / 3}
         fontWeight="bold"
-        fill={getRandomNumberTextColor()}
+        fill={getRandomColor()} // Use the same color pool for the number
         className="font-sans"
         filter="url(#blurFilter)" // Apply blur to text
       >
