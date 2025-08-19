@@ -85,19 +85,19 @@ const Results: React.FC<ResultsProps> = ({
   const getAiObservation = () => {
     const observations = [];
     if (visualAcuityResult === "needs_check") {
-      observations.push("Your visual acuity self-assessment suggests potential difficulty with distant vision.");
+      observations.push("The visual acuity self-assessment indicated challenges in discerning smaller text, which often suggests a need for corrective lenses to improve distant vision clarity.");
     }
     if (astigmatismResult === "possible") {
-      observations.push("The astigmatism test indicated a possible presence of astigmatism.");
+      observations.push("During the astigmatism test, certain radial lines appeared more distinct or blurred than others, which is a common indicator of astigmatism.");
     }
     if (colorVisionResult === "possible_deficiency") {
-      observations.push("Your color vision test results suggest a possible color vision deficiency.");
+      observations.push("Your responses to the Ishihara plates suggest a potential difficulty in distinguishing certain colors, consistent with a possible color vision deficiency.");
     }
 
     if (observations.length === 0) {
-      return "Based on the completed tests, your self-assessment indicates generally good vision across the tested areas.";
+      return "Based on the completed tests, your self-assessment indicates generally good visual performance across acuity, astigmatism, and color perception. No significant anomalies were detected within the scope of this preliminary evaluation.";
     }
-    return observations.join(" ");
+    return "Based on your self-assessment results: " + observations.join(" ");
   };
 
   const getRecommendation = () => {
