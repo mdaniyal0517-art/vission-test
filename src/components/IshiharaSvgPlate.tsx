@@ -6,42 +6,34 @@ interface IshiharaSvgPlateProps {
 }
 
 const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, size = 250 }) => {
-  const numDots = 700; // Increased number of dots for more visual noise
+  const numDots = 800; // Increased number of dots for even more visual noise
   const minDotRadius = 1.0;
-  const maxDotRadius = 4.0; // Wider range for dot sizes
+  const maxDotRadius = 4.5; // Wider range for dot sizes
 
-  // More ambiguous color palette for background and number
-  // These colors are chosen to be somewhat ambiguous for red-green color vision deficiencies
+  // Even more ambiguous color palette, focusing on greens, yellows, and browns that are easily confused
   const colors = [
-    '#8B0000', // Dark Red
-    '#A52A2A', // Brown
-    '#CD5C5C', // Indian Red
-    '#F08080', // Light Coral
-    '#DAA520', // Goldenrod
-    '#B8860B', // Dark Goldenrod
     '#808000', // Olive
     '#6B8E23', // Olive Drab
     '#556B2F', // Dark Olive Green
-    '#228B22', // Forest Green
-    '#3CB371', // Medium Sea Green
-    '#66CDAA', // Medium Aquamarine
     '#9ACD32', // Yellow Green
     '#ADFF2F', // Green Yellow
-    '#FFD700', // Gold
-    '#FFA500', // Orange
-    '#FF8C00', // Dark Orange
+    '#DAA520', // Goldenrod
+    '#B8860B', // Dark Goldenrod
+    '#CD5C5C', // Indian Red (subtle inclusion for red-green confusion)
+    '#A52A2A', // Brown (subtle inclusion)
+    '#F0E68C', // Khaki
+    '#EEE8AA', // Pale Goldenrod
+    '#BDB76B', // Dark Khaki
   ];
 
-  // For the number, pick colors that are designed to blend more with the background
-  // These are a subset of the main 'colors' array, chosen for lower contrast
-  // Specifically targeting colors that might be confused by red-green deficiencies
+  // For the number, pick colors that are designed to blend almost perfectly with the background
   const numberTextColors = [
-    '#A52A2A', // Brown
-    '#CD5C5C', // Indian Red
-    '#DAA520', // Goldenrod
     '#808000', // Olive
     '#6B8E23', // Olive Drab
-    '#556B2F', // Dark Olive Green
+    '#DAA520', // Goldenrod
+    '#B8860B', // Dark Goldenrod
+    '#CD5C5C', // Indian Red
+    '#A52A2A', // Brown
   ];
 
   const getRandomPosition = (max: number) => Math.random() * max;
@@ -58,7 +50,7 @@ const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, si
     >
       <defs>
         <filter id="blurFilter">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" /> {/* Subtle blur */}
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.0" /> {/* Slightly increased blur */}
         </filter>
       </defs>
       {/* Background dots - filling the entire circle */}

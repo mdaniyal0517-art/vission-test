@@ -195,15 +195,10 @@ const Index = () => {
 
     // Ishihara plates data with increasing difficulty
     const ishiharaPlates = [
-      { id: 1, correctAnswer: "12", numberForSvg: "12" }, // Easy
-      { id: 2, correctAnswer: "8", numberForSvg: "8" },   // Easy
-      { id: 3, correctAnswer: "6", numberForSvg: "6" },   // Easy
-      { id: 4, correctAnswer: "29", numberForSvg: "29" }, // Medium
-      { id: 5, correctAnswer: "74", numberForSvg: "74" }, // Medium
-      { id: 6, correctAnswer: "5", numberForSvg: "5" },   // Harder
-      { id: 7, correctAnswer: "3", numberForSvg: "3" },   // Harder
-      { id: 8, correctAnswer: "15", numberForSvg: "15" }, // Very Hard
-      { id: 9, correctAnswer: "17", numberForSvg: "17" }, // Very Hard
+      { id: 1, correctAnswer: "29", numberForSvg: "29" }, // Medium
+      { id: 2, correctAnswer: "74", numberForSvg: "74" }, // Medium
+      { id: 3, correctAnswer: "5", numberForSvg: "5" },   // Harder
+      { id: 4, correctAnswer: "15", numberForSvg: "15" }, // Very Hard
     ];
 
     const handleAnswerSubmit = () => {
@@ -220,7 +215,7 @@ const Index = () => {
         setInputValue(""); // Clear input for next plate
       } else {
         // All plates completed
-        if (incorrectAnswersCount > 2) { // Adjusted threshold for "possible deficiency"
+        if (incorrectAnswersCount > 1) { // If 2 or more incorrect answers out of 4 plates
           setColorVisionResult("possible_deficiency");
           showError("You've completed the color vision test with several incorrect answers.");
         } else {
