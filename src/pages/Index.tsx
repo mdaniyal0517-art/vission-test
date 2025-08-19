@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Disclaimer from "@/components/Disclaimer";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import AstigmatismDial from "@/components/AstigmatismDial"; // Import the new component
 
 // Define the possible steps in our application flow
 type AppStep = "disclaimer" | "calibration" | "visualAcuity" | "astigmatism" | "colorVision" | "results";
@@ -51,9 +52,10 @@ const Index = () => {
   const AstigmatismDialTest = () => (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
       <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Astigmatism Dial Test</h1>
-      <p className="text-lg text-gray-600 dark:text-gray-300">
-        This will show the radial lines.
+      <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+        Focus on the center. Do any lines appear darker or clearer than others?
       </p>
+      <AstigmatismDial /> {/* Use the new AstigmatismDial component */}
       <button 
         onClick={() => setCurrentStep("colorVision")} 
         className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-md text-lg hover:bg-blue-700 transition-colors"
