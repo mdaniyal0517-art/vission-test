@@ -4,8 +4,9 @@ import React, { useState, useRef, useEffect } from "react";
 import Disclaimer from "@/components/Disclaimer";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import AstigmatismDial from "@/components/AstigmatismDial";
-import SnellenChart from "@/components/SnellenChart"; // Import the new SnellenChart component
-import { showSuccess, showError } from "@/utils/toast"; // Import toast utilities
+import SnellenChart from "@/components/SnellenChart";
+import IshiharaPlate from "@/components/IshiharaPlate"; // Import the new IshiharaPlate component
+import { showSuccess, showError } from "@/utils/toast";
 
 // Define the possible steps in our application flow
 type AppStep = "disclaimer" | "calibration" | "visualAcuity" | "astigmatism" | "colorVision" | "results";
@@ -171,21 +172,69 @@ const Index = () => {
     );
   };
 
-  const ColorVisionTest = () => (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Color Vision Test</h1>
-      <p className="text-lg text-gray-600 dark:text-gray-300">
-        This will show Ishihara plates.
-      </p>
-      <button
-        onClick={() => setCurrentStep("results")}
-        className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-md text-lg hover:bg-blue-700 transition-colors"
-      >
-        View Results (Placeholder)
-      </button>
-      <MadeWithDyad />
-    </div>
-  );
+  const ColorVisionTest = () => {
+    const [currentPlateIndex, setCurrentPlateIndex] = useState(0);
+    const [inputValue, setInputValue] = useState("");
+
+    // Placeholder Ishihara plates data. Replace imageUrls with actual paths to your images.
+    const ishiharaPlates = [
+      { id: 1, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+1", correctAnswer: "12" },
+      { id: 2, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+2", correctAnswer: "8" },
+      { id: 3, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+3", correctAnswer: "6" },
+      { id: 4, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+4", correctAnswer: "29" },
+      { id: 5, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+5", correctAnswer: "74" },
+    ];
+
+    const handleAnswerSubmit = () => {
+      const currentPlate = ishiharaPlates[currentPlateIndex];
+      if (inputValue.trim() === currentPlate.correctAnswer) {
+        showSuccess("Correct! Moving to the next plate.");
+        if (currentPlateIndex < ishiharaPlates.length - 1) {
+          setCurrentPlateIndex(prev => prev + 1);
+          setInputValue(""); // Clear input for next plate
+        } else {
+          showSuccess("You've completed the color vision test!");
+          setCurrentStep("results");
+        }
+      } else {
+        showError(`Incorrect. The correct answer was ${currentPlate.correctAnswer}.`);
+        // Optionally, you could allow retries or move to the next plate/results
+        if (currentPlateIndex < ishiharaPlates.length - 1) {
+          setCurrentPlateIndex(prev => prev + 1);
+          setInputValue("");
+        } else {
+          showError("You've completed the color vision test with some incorrect answers.");
+          setCurrentStep("results");
+        }
+      }
+    };
+
+    const currentPlate = ishiharaPlates[currentPlateIndex];
+
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Color Vision Test</h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+          What number do you see in the image below?
+        </p>
+
+        <IshiharaPlate
+          imageUrl={currentPlate.imageUrl}
+          plateNumber={currentPlate.id}
+          onAnswerChange={setInputValue}
+          inputValue={inputValue}
+        />
+
+        <button
+          onClick={handleAnswerSubmit}
+          className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-md text-lg hover:bg-blue-700 transition-colors"
+        >
+          Submit Answer
+        </button>
+        <MadeWithDyad />
+      </div>
+    );
+  };
 
   const Results = () => (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
