@@ -6,6 +6,7 @@ import { MadeWithDyad } from "@/components/made-with-dyad";
 import AstigmatismDial from "@/components/AstigmatismDial";
 import SnellenChart from "@/components/SnellenChart";
 import IshiharaPlate from "@/components/IshiharaPlate";
+import Results from "@/components/Results"; // Import the new Results component
 import { showSuccess, showError } from "@/utils/toast";
 
 // Define the possible steps in our application flow
@@ -13,9 +14,20 @@ type AppStep = "disclaimer" | "calibration" | "visualAcuity" | "astigmatism" | "
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState<AppStep>("disclaimer");
+  const [visualAcuityResult, setVisualAcuityResult] = useState<"good" | "needs_check" | null>(null);
+  const [astigmatismResult, setAstigmatismResult] = useState<"none" | "possible" | null>(null);
+  const [colorVisionResult, setColorVisionResult] = useState<"normal" | "possible_deficiency" | null>(null);
 
   const handleAgreeToDisclaimer = () => {
     setCurrentStep("calibration");
+  };
+
+  const handleRetakeTest = () => {
+    // Reset all states and go back to disclaimer
+    setCurrentStep("disclaimer");
+    setVisualAcuityResult(null);
+    setAstigmatismResult(null);
+    setColorVisionResult(null);
   };
 
   const Calibration = () => {
@@ -94,12 +106,14 @@ const Index = () => {
         showSuccess("Great! Let's try a smaller one.");
       } else {
         showSuccess("Excellent! You've completed the visual acuity test.");
+        setVisualAcuityResult("good");
         setCurrentStep("astigmatism");
       }
     };
 
     const handleCannotRead = () => {
       showError("It seems you're having difficulty. Please consult an eye care professional.");
+      setVisualAcuityResult("needs_check");
       setCurrentStep("astigmatism"); // Move to next test regardless
     };
 
@@ -138,11 +152,13 @@ const Index = () => {
   const AstigmatismDialTest = () => {
     const handleLinesDifferent = () => {
       showError("It seems you might have astigmatism. Please consult an eye care professional.");
+      setAstigmatismResult("possible");
       setCurrentStep("colorVision");
     };
 
     const handleLinesSame = () => {
       showSuccess("Great! Your astigmatism test indicates no significant issues.");
+      setAstigmatismResult("none");
       setCurrentStep("colorVision");
     };
 
@@ -175,6 +191,7 @@ const Index = () => {
   const ColorVisionTest = () => {
     const [currentPlateIndex, setCurrentPlateIndex] = useState(0);
     const [inputValue, setInputValue] = useState("");
+    const [incorrectAnswersCount, setIncorrectAnswersCount] = useState(0);
 
     // Ishihara plates data using the new SVG component
     const ishiharaPlates = [
@@ -187,23 +204,24 @@ const Index = () => {
       const currentPlate = ishiharaPlates[currentPlateIndex];
       if (inputValue.trim() === currentPlate.correctAnswer) {
         showSuccess("Correct! Moving to the next plate.");
-        if (currentPlateIndex < ishiharaPlates.length - 1) {
-          setCurrentPlateIndex(prev => prev + 1);
-          setInputValue(""); // Clear input for next plate
-        } else {
-          showSuccess("You've completed the color vision test!");
-          setCurrentStep("results");
-        }
       } else {
         showError(`Incorrect. The correct answer was ${currentPlate.correctAnswer}.`);
-        // Optionally, you could allow retries or move to the next plate/results
-        if (currentPlateIndex < ishiharaPlates.length - 1) {
-          setCurrentPlateIndex(prev => prev + 1);
-          setInputValue("");
-        } else {
+        setIncorrectAnswersCount(prev => prev + 1);
+      }
+
+      if (currentPlateIndex < ishiharaPlates.length - 1) {
+        setCurrentPlateIndex(prev => prev + 1);
+        setInputValue(""); // Clear input for next plate
+      } else {
+        // All plates completed
+        if (incorrectAnswersCount > 0) {
+          setColorVisionResult("possible_deficiency");
           showError("You've completed the color vision test with some incorrect answers.");
-          setCurrentStep("results");
+        } else {
+          setColorVisionResult("normal");
+          showSuccess("You've completed the color vision test!");
         }
+        setCurrentStep("results");
       }
     };
 
@@ -234,16 +252,6 @@ const Index = () => {
     );
   };
 
-  const Results = () => (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Your Vision Check Results</h1>
-      <p className="text-lg text-gray-600 dark:text-gray-300">
-        This is where the AI analysis and conclusion will be displayed.
-      </p>
-      <MadeWithDyad />
-    </div>
-  );
-
   return (
     <>
       {currentStep === "disclaimer" && <Disclaimer onAgree={handleAgreeToDisclaimer} />}
@@ -251,7 +259,14 @@ const Index = () => {
       {currentStep === "visualAcuity" && <VisualAcuityTest />}
       {currentStep === "astigmatism" && <AstigmatismDialTest />}
       {currentStep === "colorVision" && <ColorVisionTest />}
-      {currentStep === "results" && <Results />}
+      {currentStep === "results" && (
+        <Results
+          visualAcuityResult={visualAcuityResult}
+          astigmatismResult={astigmatismResult}
+          colorVisionResult={colorVisionResult}
+          onRetakeTest={handleRetakeTest}
+        />
+      )}
     </>
   );
 };
