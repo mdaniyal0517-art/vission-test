@@ -17,7 +17,7 @@ const Disclaimer: React.FC<DisclaimerProps> = ({ onAgree }) => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-lg shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Important Disclaimer</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">Welcome to Eye Vision AI</CardTitle>
           <CardDescription className="text-center">Please read carefully before proceeding.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 text-gray-700 dark:text-gray-300">
