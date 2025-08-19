@@ -23,6 +23,7 @@ const Disclaimer: React.FC<DisclaimerProps> = ({ onAgree }) => {
         <CardContent className="space-y-4 text-gray-700 dark:text-gray-300">
           <p>
             This tool is designed for preliminary self-assessment of vision only.
+            It can help you identify potential vision issues and provide an indication if a professional eye examination might be beneficial.
             It is not a substitute for a professional eye examination by a qualified optometrist or ophthalmologist.
           </p>
           <p>
