@@ -176,13 +176,13 @@ const Index = () => {
     const [currentPlateIndex, setCurrentPlateIndex] = useState(0);
     const [inputValue, setInputValue] = useState("");
 
-    // Ishihara plates data with actual image URLs
+    // Ishihara plates data with local image URLs (assuming images are in the public folder)
     const ishiharaPlates = [
-      { id: 1, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Ishihara_plate_1.png/320px-Ishihara_plate_1.png", correctAnswer: "12" },
-      { id: 2, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Ishihara_plate_2.png/320px-Ishihara_plate_2.png", correctAnswer: "8" },
-      { id: 3, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Ishihara_plate_3.png/320px-Ishihara_plate_3.png", correctAnswer: "6" },
-      { id: 4, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ishihara_plate_4.png/320px-Ishihara_plate_4.png", correctAnswer: "29" },
-      { id: 5, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Ishihara_plate_5.png/320px-Ishihara_plate_5.png", correctAnswer: "74" },
+      { id: 1, imageUrl: "/ishihara_plate_1.png", correctAnswer: "12" },
+      { id: 2, imageUrl: "/ishihara_plate_2.png", correctAnswer: "8" },
+      { id: 3, imageUrl: "/ishihara_plate_3.png", correctAnswer: "6" },
+      { id: 4, imageUrl: "/ishihara_plate_4.png", correctAnswer: "29" },
+      { id: 5, imageUrl: "/ishihara_plate_5.png", correctAnswer: "74" },
     ];
 
     const handleAnswerSubmit = () => {
