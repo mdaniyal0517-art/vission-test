@@ -6,40 +6,29 @@ interface IshiharaSvgPlateProps {
 }
 
 const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, size = 250 }) => {
-  const numDots = 1200; // Increased number of dots for a denser pattern
-  const minDotRadius = 0.8;
-  const maxDotRadius = 3.5; // Adjusted dot sizes for a more refined look
+  const numDots = 2000; // Increased number of dots for maximum visual noise
+  const minDotRadius = 1.0;
+  const maxDotRadius = 3.0; // Narrower range for dot sizes
 
-  // Colors for the background dots (greens, yellows, browns)
-  const backgroundDotColors = [
-    '#008000', // Green
-    '#32CD32', // Lime Green
-    '#ADFF2F', // Green Yellow
-    '#9ACD32', // Yellow Green
-    '#6B8E23', // Olive Drab
+  // A very ambiguous color palette, focusing on greens, yellows, and browns that are easily confused
+  // These colors are chosen to be very close in perceived lightness and saturation for color-deficient vision
+  const ambiguousColors = [
     '#808000', // Olive
-    '#BDB76B', // Dark Khaki
+    '#6B8E23', // Olive Drab
+    '#556B2F', // Dark Olive Green
     '#DAA520', // Goldenrod
-    '#A52A2A', // Brownish Red (for blending with number for colorblind)
-    '#CD853F', // Peru (brownish orange)
-  ];
-
-  // Colors for the number (reds, oranges, purples) - designed to contrast for normal vision
-  // but blend with background for red-green colorblindness
-  const numberColors = [
-    '#FF0000', // Red
-    '#FF4500', // OrangeRed
-    '#DC143C', // Crimson
-    '#B22222', // FireBrick
-    '#8B0000', // DarkRed
-    '#800080', // Purple
-    '#4B0082', // Indigo (for blue contrast)
+    '#B8860B', // Dark Goldenrod
+    '#A52A2A', // Brown
+    '#BDB76B', // Dark Khaki
+    '#CD5C5C', // Indian Red (desaturated)
+    '#D2B48C', // Tan
+    '#F4A460', // Sandy Brown
+    '#C0C0C0', // Silver (for some neutral blending)
   ];
 
   const getRandomPosition = (max: number) => Math.random() * max;
   const getRandomDotRadius = () => minDotRadius + Math.random() * (maxDotRadius - minDotRadius);
-  const getRandomBackgroundDotColor = () => backgroundDotColors[Math.floor(Math.random() * backgroundDotColors.length)];
-  const getRandomNumberColor = () => numberColors[Math.floor(Math.random() * numberColors.length)];
+  const getRandomAmbiguousColor = () => ambiguousColors[Math.floor(Math.random() * ambiguousColors.length)];
 
   return (
     <svg
@@ -50,7 +39,10 @@ const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, si
     >
       <defs>
         <filter id="dotBlurFilter">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" /> {/* Slight blur for dots */}
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.0" /> {/* Slight blur for dots */}
+        </filter>
+        <filter id="textBlurFilter">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" /> {/* Very subtle blur for text */}
         </filter>
       </defs>
       {/* Background dots - filling the entire circle */}
@@ -60,20 +52,21 @@ const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, si
           cx={getRandomPosition(size)}
           cy={getRandomPosition(size)}
           r={getRandomDotRadius()}
-          fill={getRandomBackgroundDotColor()}
+          fill={getRandomAmbiguousColor()}
           filter="url(#dotBlurFilter)"
         />
       ))}
-      {/* The number text, with a color that contrasts for normal vision */}
+      {/* The number text, with a color that blends more */}
       <text
         x="50%"
         y="50%"
         dominantBaseline="middle"
         textAnchor="middle"
-        fontSize={size / 2.8} // Slightly larger font for clarity
+        fontSize={size / 2.8}
         fontWeight="bold"
-        fill={getRandomNumberColor()}
+        fill={getRandomAmbiguousColor()} // Use the same ambiguous color pool for the number
         className="font-sans select-none" // Prevent text selection
+        filter="url(#textBlurFilter)" // Apply subtle blur to text
       >
         {numberToDisplay}
       </text>

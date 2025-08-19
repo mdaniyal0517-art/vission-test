@@ -89,22 +89,21 @@ const Index = () => {
   const VisualAcuityTest = () => {
     const [currentSnellenIndex, setCurrentSnellenIndex] = useState(0);
 
+    // Fewer letters, faster progression to smaller sizes
     const snellenLetters = [
-      { letter: "E", size: "text-[200px]" },
-      { letter: "F", size: "text-[150px]" },
-      { letter: "P", size: "text-[100px]" },
-      { letter: "T", size: "text-[80px]" },
-      { letter: "O", size: "text-[60px]" },
+      { letter: "E", size: "text-[150px]" },
+      { letter: "F", size: "text-[100px]" },
+      { letter: "P", size: "text-[60px]" },
       { letter: "Z", size: "text-[40px]" },
-      { letter: "L", size: "text-[30px]" },
-      { letter: "D", size: "text-[20px]" },
+      { letter: "D", size: "text-[20px]" }, // Smallest letter
     ];
 
     const handleCanRead = () => {
       if (currentSnellenIndex < snellenLetters.length - 1) {
         setCurrentSnellenIndex(prev => prev + 1);
-        showSuccess("Great! Let's try a smaller one.");
+        showSuccess("Good! Let's try a smaller one.");
       } else {
+        // User read the smallest letter
         showSuccess("Excellent! You've completed the visual acuity test.");
         setVisualAcuityResult("good");
         setCurrentStep("astigmatism");
@@ -112,7 +111,7 @@ const Index = () => {
     };
 
     const handleCannotRead = () => {
-      showError("It seems you're having difficulty. Please consult an eye care professional.");
+      showError("It seems you're having difficulty. This may indicate a need for vision correction.");
       setVisualAcuityResult("needs_check");
       setCurrentStep("astigmatism"); // Move to next test regardless
     };

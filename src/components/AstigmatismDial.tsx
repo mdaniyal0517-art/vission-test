@@ -3,7 +3,7 @@ import React from 'react';
 const AstigmatismDial: React.FC = () => {
   const numLines = 12; // Number of radial lines
   const radius = 100; // Radius of the dial
-  const strokeWidth = 2; // Thickness of the lines
+  const strokeWidth = 1; // Thinner lines for increased difficulty
 
   // Calculate the angle for each line
   const angleStep = 360 / numLines;
@@ -41,7 +41,7 @@ const AstigmatismDial: React.FC = () => {
               y2={y2}
               stroke="currentColor"
               strokeWidth={strokeWidth}
-              className="text-gray-800 dark:text-gray-200"
+              className="text-gray-600 dark:text-gray-400" {/* Reduced contrast */}
             />
           );
         })}
