@@ -41,7 +41,7 @@ const AstigmatismDial: React.FC = () => {
               y2={y2}
               stroke="currentColor"
               strokeWidth={strokeWidth}
-              className="text-gray-600 dark:text-gray-400" {/* Reduced contrast */}
+              className="text-gray-600 dark:text-gray-400"
             />
           );
         })}
