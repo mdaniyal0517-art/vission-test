@@ -134,22 +134,42 @@ const Index = () => {
     );
   };
 
-  const AstigmatismDialTest = () => (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Astigmatism Dial Test</h1>
-      <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-        Focus on the center. Do any lines appear darker or clearer than others?
-      </p>
-      <AstigmatismDial />
-      <button
-        onClick={() => setCurrentStep("colorVision")}
-        className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-md text-lg hover:bg-blue-700 transition-colors"
-      >
-        Proceed to Color Vision Test (Placeholder)
-      </button>
-      <MadeWithDyad />
-    </div>
-  );
+  const AstigmatismDialTest = () => {
+    const handleLinesDifferent = () => {
+      showError("It seems you might have astigmatism. Please consult an eye care professional.");
+      setCurrentStep("colorVision");
+    };
+
+    const handleLinesSame = () => {
+      showSuccess("Great! Your astigmatism test indicates no significant issues.");
+      setCurrentStep("colorVision");
+    };
+
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Astigmatism Dial Test</h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+          Focus on the center. Do any lines appear darker or clearer than others?
+        </p>
+        <AstigmatismDial />
+        <div className="flex space-x-4 mt-8">
+          <button
+            onClick={handleLinesDifferent}
+            className="px-6 py-3 bg-red-600 text-white rounded-md text-lg hover:bg-red-700 transition-colors"
+          >
+            Yes, some lines are darker/clearer
+          </button>
+          <button
+            onClick={handleLinesSame}
+            className="px-6 py-3 bg-green-600 text-white rounded-md text-lg hover:bg-green-700 transition-colors"
+          >
+            No, all lines look the same
+          </button>
+        </div>
+        <MadeWithDyad />
+      </div>
+    );
+  };
 
   const ColorVisionTest = () => (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
