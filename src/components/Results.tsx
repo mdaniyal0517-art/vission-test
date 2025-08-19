@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { CheckCircle, XCircle, Eye, Palette, Share2 } from "lucide-react"; // Import icons
 
 interface ResultsProps {
   visualAcuityResult: "good" | "needs_check" | null;
@@ -24,33 +25,60 @@ const Results: React.FC<ResultsProps> = ({
   const getAcuitySummary = () => {
     switch (visualAcuityResult) {
       case "good":
-        return "Visual Acuity: You were able to read the smallest letters, indicating good visual acuity for this self-assessment.";
+        return {
+          icon: <CheckCircle className="text-green-500 mr-2" />,
+          text: "Visual Acuity: You were able to read the smallest letters, indicating good visual acuity for this self-assessment.",
+        };
       case "needs_check":
-        return "Visual Acuity: You had difficulty reading smaller letters, which may suggest a need for vision correction.";
+        return {
+          icon: <XCircle className="text-red-500 mr-2" />,
+          text: "Visual Acuity: You had difficulty reading smaller letters, which may suggest a need for vision correction.",
+        };
       default:
-        return "Visual Acuity: Test not completed or result inconclusive.";
+        return {
+          icon: <Eye className="text-gray-500 mr-2" />,
+          text: "Visual Acuity: Test not completed or result inconclusive.",
+        };
     }
   };
 
   const getAstigmatismSummary = () => {
     switch (astigmatismResult) {
       case "none":
-        return "Astigmatism: All lines on the dial appeared equally clear, suggesting no significant astigmatism based on this test.";
+        return {
+          icon: <CheckCircle className="text-green-500 mr-2" />,
+          text: "Astigmatism: All lines on the dial appeared equally clear, suggesting no significant astigmatism based on this test.",
+        };
       case "possible":
-        return "Astigmatism: Some lines on the dial appeared darker or clearer, which could indicate astigmatism.";
+        return {
+          icon: <XCircle className="text-red-500 mr-2" />,
+          text: "Astigmatism: Some lines on the dial appeared darker or clearer, which could indicate astigmatism.",
+        };
       default:
-        return "Astigmatism: Test not completed or result inconclusive.";
+        return {
+          icon: <Eye className="text-gray-500 mr-2" />,
+          text: "Astigmatism: Test not completed or result inconclusive.",
+        };
     }
   };
 
   const getColorVisionSummary = () => {
     switch (colorVisionResult) {
       case "normal":
-        return "Color Vision: You correctly identified the numbers on the Ishihara plates, suggesting normal color vision.";
+        return {
+          icon: <CheckCircle className="text-green-500 mr-2" />,
+          text: "Color Vision: You correctly identified the numbers on the Ishihara plates, suggesting normal color vision.",
+        };
       case "possible_deficiency":
-        return "Color Vision: You had difficulty identifying numbers on some Ishihara plates, which may indicate a color vision deficiency.";
+        return {
+          icon: <XCircle className="text-red-500 mr-2" />,
+          text: "Color Vision: You had difficulty identifying numbers on some Ishihara plates, which may indicate a color vision deficiency.",
+        };
       default:
-        return "Color Vision: Test not completed or result inconclusive.";
+        return {
+          icon: <Palette className="text-gray-500 mr-2" />,
+          text: "Color Vision: Test not completed or result inconclusive.",
+        };
     }
   };
 
@@ -79,9 +107,30 @@ const Results: React.FC<ResultsProps> = ({
     return "Your self-assessment indicates generally good vision. However, this tool is for preliminary self-assessment only and is not a substitute for a professional eye examination. Regular eye check-ups are recommended.";
   };
 
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Eye Vision AI Self-Check',
+        text: 'Check your vision with this free online tool!',
+        url: window.location.href,
+      })
+      .then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error));
+    } else {
+      // Fallback for browsers that do not support the Web Share API
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert('Link copied to clipboard! Share this tool with your friends and family.'))
+        .catch((err) => console.error('Could not copy text: ', err));
+    }
+  };
+
+  const acuitySummary = getAcuitySummary();
+  const astigmatismSummary = getAstigmatismSummary();
+  const colorVisionSummary = getColorVisionSummary();
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
-      <Card className="w-full max-w-2xl shadow-lg">
+      <Card className="w-full max-w-2xl shadow-lg mb-6">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-gray-800 dark:text-gray-100">Your Vision Check Results</CardTitle>
           <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
@@ -89,29 +138,41 @@ const Results: React.FC<ResultsProps> = ({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 text-gray-700 dark:text-gray-300">
-          <div className="space-y-2">
-            <h3 className="text-xl font-semibold">Test Summaries:</h3>
-            <p>{getAcuitySummary()}</p>
-            <p>{getAstigmatismSummary()}</p>
-            <p>{getColorVisionSummary()}</p>
-          </div>
+          <Card className="p-4 bg-gray-50 dark:bg-gray-700">
+            <CardTitle className="text-xl font-semibold mb-2 flex items-center">
+              <Eye className="mr-2" /> Test Summaries:
+            </CardTitle>
+            <p className="flex items-start">{acuitySummary.icon}{acuitySummary.text}</p>
+            <p className="flex items-start">{astigmatismSummary.icon}{astigmatismSummary.text}</p>
+            <p className="flex items-start">{colorVisionSummary.icon}{colorVisionSummary.text}</p>
+          </Card>
 
-          <div className="space-y-2">
-            <h3 className="text-xl font-semibold">AI Observation:</h3>
+          <Card className="p-4 bg-gray-50 dark:bg-gray-700">
+            <CardTitle className="text-xl font-semibold mb-2 flex items-center">
+              <Share2 className="mr-2" /> AI Observation:
+            </CardTitle>
             <p>{getAiObservation()}</p>
-          </div>
+          </Card>
 
-          <div className="space-y-2">
-            <h3 className="text-xl font-semibold">Recommendation:</h3>
-            <p className={needsSpecialist ? "text-red-600 dark:text-red-400 font-bold" : "text-green-600 dark:text-green-400 font-bold"}>
+          <Card className={`p-4 ${needsSpecialist ? "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700" : "bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700"} border-l-4`}>
+            <CardTitle className="text-xl font-semibold mb-2 flex items-center">
+              Recommendation:
+            </CardTitle>
+            <p className={needsSpecialist ? "text-red-700 dark:text-red-300 font-bold" : "text-green-700 dark:text-green-300 font-bold"}>
               {getRecommendation()}
             </p>
-          </div>
+          </Card>
         </CardContent>
-        <div className="flex justify-center p-6">
+        <div className="flex flex-col items-center p-6 space-y-4">
           <Button onClick={onRetakeTest} className="w-full max-w-xs">
             Retake Test
           </Button>
+          <Button onClick={handleShare} className="w-full max-w-xs bg-purple-600 hover:bg-purple-700 text-white">
+            <Share2 className="mr-2 h-4 w-4" /> Share This Tool
+          </Button>
+          <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
+            Help others check their vision too!
+          </p>
         </div>
       </Card>
       <MadeWithDyad />
