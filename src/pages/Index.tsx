@@ -176,13 +176,11 @@ const Index = () => {
     const [currentPlateIndex, setCurrentPlateIndex] = useState(0);
     const [inputValue, setInputValue] = useState("");
 
-    // Ishihara plates data with local image URLs (assuming images are in the public folder)
+    // Ishihara plates data using the new SVG component
     const ishiharaPlates = [
-      { id: 1, imageUrl: "/ishihara_plate_1.png", correctAnswer: "12" },
-      { id: 2, imageUrl: "/ishihara_plate_2.png", correctAnswer: "8" },
-      { id: 3, imageUrl: "/ishihara_plate_3.png", correctAnswer: "6" },
-      { id: 4, imageUrl: "/ishihara_plate_4.png", correctAnswer: "29" },
-      { id: 5, imageUrl: "/ishihara_plate_5.png", correctAnswer: "74" },
+      { id: 1, correctAnswer: "12", numberForSvg: "12" },
+      { id: 2, correctAnswer: "8", numberForSvg: "8" },
+      { id: 3, correctAnswer: "6", numberForSvg: "6" },
     ];
 
     const handleAnswerSubmit = () => {
@@ -219,10 +217,10 @@ const Index = () => {
         </p>
 
         <IshiharaPlate
-          imageUrl={currentPlate.imageUrl}
           plateNumber={currentPlate.id}
           onAnswerChange={setInputValue}
           inputValue={inputValue}
+          correctAnswerForSvg={currentPlate.numberForSvg} // Pass the number for SVG
         />
 
         <button
