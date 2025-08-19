@@ -193,11 +193,17 @@ const Index = () => {
     const [inputValue, setInputValue] = useState("");
     const [incorrectAnswersCount, setIncorrectAnswersCount] = useState(0);
 
-    // Ishihara plates data using the new SVG component
+    // Ishihara plates data with increasing difficulty
     const ishiharaPlates = [
-      { id: 1, correctAnswer: "12", numberForSvg: "12" },
-      { id: 2, correctAnswer: "8", numberForSvg: "8" },
-      { id: 3, correctAnswer: "6", numberForSvg: "6" },
+      { id: 1, correctAnswer: "12", numberForSvg: "12" }, // Easy
+      { id: 2, correctAnswer: "8", numberForSvg: "8" },   // Easy
+      { id: 3, correctAnswer: "6", numberForSvg: "6" },   // Easy
+      { id: 4, correctAnswer: "29", numberForSvg: "29" }, // Medium
+      { id: 5, correctAnswer: "74", numberForSvg: "74" }, // Medium
+      { id: 6, correctAnswer: "5", numberForSvg: "5" },   // Harder
+      { id: 7, correctAnswer: "3", numberForSvg: "3" },   // Harder
+      { id: 8, correctAnswer: "15", numberForSvg: "15" }, // Very Hard
+      { id: 9, correctAnswer: "17", numberForSvg: "17" }, // Very Hard
     ];
 
     const handleAnswerSubmit = () => {
@@ -214,9 +220,9 @@ const Index = () => {
         setInputValue(""); // Clear input for next plate
       } else {
         // All plates completed
-        if (incorrectAnswersCount > 0) {
+        if (incorrectAnswersCount > 2) { // Adjusted threshold for "possible deficiency"
           setColorVisionResult("possible_deficiency");
-          showError("You've completed the color vision test with some incorrect answers.");
+          showError("You've completed the color vision test with several incorrect answers.");
         } else {
           setColorVisionResult("normal");
           showSuccess("You've completed the color vision test!");
@@ -231,7 +237,7 @@ const Index = () => {
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
         <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Color Vision Test</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-          What number do you see in the image below?
+          What number do you see in the image below? (Plate {currentPlateIndex + 1} of {ishiharaPlates.length})
         </p>
 
         <IshiharaPlate
