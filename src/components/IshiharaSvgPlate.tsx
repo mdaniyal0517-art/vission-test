@@ -6,38 +6,51 @@ interface IshiharaSvgPlateProps {
 }
 
 const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, size = 250 }) => {
-  const numDots = 1000; // Increased number of dots for even more visual noise
-  const minDotRadius = 0.8; // Slightly smaller min radius
-  const maxDotRadius = 4.0; // Slightly smaller max radius, to make dots less distinct
+  const numDots = 1200; // Increased number of dots for a denser pattern
+  const minDotRadius = 0.8;
+  const maxDotRadius = 3.5; // Adjusted dot sizes for a more refined look
 
-  // Even more ambiguous color palette, focusing on greens, yellows, and browns that are easily confused
-  // These colors are chosen to be very close in perceived lightness and saturation for color-deficient vision
-  const commonColors = [
-    '#808000', // Olive
+  // Colors for the background dots (greens, yellows, browns)
+  const backgroundDotColors = [
+    '#008000', // Green
+    '#32CD32', // Lime Green
+    '#ADFF2F', // Green Yellow
+    '#9ACD32', // Yellow Green
     '#6B8E23', // Olive Drab
-    '#556B2F', // Dark Olive Green
-    '#DAA520', // Goldenrod
-    '#B8860B', // Dark Goldenrod
-    '#A52A2A', // Brown
+    '#808000', // Olive
     '#BDB76B', // Dark Khaki
-    '#9ACD32', // Yellow Green (slightly desaturated)
-    '#CD5C5C', // Indian Red (desaturated)
+    '#DAA520', // Goldenrod
+    '#A52A2A', // Brownish Red (for blending with number for colorblind)
+    '#CD853F', // Peru (brownish orange)
+  ];
+
+  // Colors for the number (reds, oranges, purples) - designed to contrast for normal vision
+  // but blend with background for red-green colorblindness
+  const numberColors = [
+    '#FF0000', // Red
+    '#FF4500', // OrangeRed
+    '#DC143C', // Crimson
+    '#B22222', // FireBrick
+    '#8B0000', // DarkRed
+    '#800080', // Purple
+    '#4B0082', // Indigo (for blue contrast)
   ];
 
   const getRandomPosition = (max: number) => Math.random() * max;
   const getRandomDotRadius = () => minDotRadius + Math.random() * (maxDotRadius - minDotRadius);
-  const getRandomColor = () => commonColors[Math.floor(Math.random() * commonColors.length)];
+  const getRandomBackgroundDotColor = () => backgroundDotColors[Math.floor(Math.random() * backgroundDotColors.length)];
+  const getRandomNumberColor = () => numberColors[Math.floor(Math.random() * numberColors.length)];
 
   return (
     <svg
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      className="rounded-full border border-gray-300 dark:border-gray-600 shadow-md"
+      className="rounded-full border-2 border-gray-400 dark:border-gray-600 shadow-lg bg-gray-50 dark:bg-gray-700"
     >
       <defs>
-        <filter id="blurFilter">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" /> {/* Increased blur */}
+        <filter id="dotBlurFilter">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" /> {/* Slight blur for dots */}
         </filter>
       </defs>
       {/* Background dots - filling the entire circle */}
@@ -47,21 +60,20 @@ const IshiharaSvgPlate: React.FC<IshiharaSvgPlateProps> = ({ numberToDisplay, si
           cx={getRandomPosition(size)}
           cy={getRandomPosition(size)}
           r={getRandomDotRadius()}
-          fill={getRandomColor()}
-          filter="url(#blurFilter)" // Apply blur to dots
+          fill={getRandomBackgroundDotColor()}
+          filter="url(#dotBlurFilter)"
         />
       ))}
-      {/* The number text, with a color that blends more */}
+      {/* The number text, with a color that contrasts for normal vision */}
       <text
         x="50%"
         y="50%"
         dominantBaseline="middle"
         textAnchor="middle"
-        fontSize={size / 3}
+        fontSize={size / 2.8} // Slightly larger font for clarity
         fontWeight="bold"
-        fill={getRandomColor()} // Use the same color pool for the number
-        className="font-sans"
-        filter="url(#blurFilter)" // Apply blur to text
+        fill={getRandomNumberColor()}
+        className="font-sans select-none" // Prevent text selection
       >
         {numberToDisplay}
       </text>
