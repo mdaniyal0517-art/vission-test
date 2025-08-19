@@ -5,7 +5,7 @@ import Disclaimer from "@/components/Disclaimer";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import AstigmatismDial from "@/components/AstigmatismDial";
 import SnellenChart from "@/components/SnellenChart";
-import IshiharaPlate from "@/components/IshiharaPlate"; // Import the new IshiharaPlate component
+import IshiharaPlate from "@/components/IshiharaPlate";
 import { showSuccess, showError } from "@/utils/toast";
 
 // Define the possible steps in our application flow
@@ -176,13 +176,13 @@ const Index = () => {
     const [currentPlateIndex, setCurrentPlateIndex] = useState(0);
     const [inputValue, setInputValue] = useState("");
 
-    // Placeholder Ishihara plates data. Replace imageUrls with actual paths to your images.
+    // Ishihara plates data with actual image URLs
     const ishiharaPlates = [
-      { id: 1, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+1", correctAnswer: "12" },
-      { id: 2, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+2", correctAnswer: "8" },
-      { id: 3, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+3", correctAnswer: "6" },
-      { id: 4, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+4", correctAnswer: "29" },
-      { id: 5, imageUrl: "https://via.placeholder.com/300x300?text=Ishihara+Plate+5", correctAnswer: "74" },
+      { id: 1, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Ishihara_plate_1.png/320px-Ishihara_plate_1.png", correctAnswer: "12" },
+      { id: 2, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Ishihara_plate_2.png/320px-Ishihara_plate_2.png", correctAnswer: "8" },
+      { id: 3, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Ishihara_plate_3.png/320px-Ishihara_plate_3.png", correctAnswer: "6" },
+      { id: 4, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ishihara_plate_4.png/320px-Ishihara_plate_4.png", correctAnswer: "29" },
+      { id: 5, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Ishihara_plate_5.png/320px-Ishihara_plate_5.png", correctAnswer: "74" },
     ];
 
     const handleAnswerSubmit = () => {
