@@ -11,6 +11,7 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ url, size = 256 }) => {
   return (
     <Card className="p-4 flex flex-col items-center justify-center bg-white dark:bg-gray-700 shadow-md">
       <CardContent className="p-0">
+        <h2 className="text-lg font-bold mb-2 text-gray-800 dark:text-gray-100">Scan this QR</h2>
         <QRCode
           value={url}
           size={size}
