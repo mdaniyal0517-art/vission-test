@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { CheckCircle, XCircle, Eye, Palette, Share2, Lightbulb } from "lucide-react"; // Added Lightbulb icon
+import { CheckCircle, XCircle, Eye, Palette, Share2, Lightbulb } from "lucide-react";
 
 interface ResultsProps {
   visualAcuityResult: "good" | "needs_check" | null;
@@ -17,6 +17,8 @@ const Results: React.FC<ResultsProps> = ({
   colorVisionResult,
   onRetakeTest,
 }) => {
+  const [eyeTipUnlocked, setEyeTipUnlocked] = useState(false); // State to control eye tip visibility
+
   const needsSpecialist =
     visualAcuityResult === "needs_check" ||
     astigmatismResult === "possible" ||
@@ -107,7 +109,7 @@ const Results: React.FC<ResultsProps> = ({
     return "Your self-assessment indicates generally good vision. However, this tool is for preliminary self-assessment only and is not a substitute for a professional eye examination. Regular eye check-ups are recommended.";
   };
 
-  const getEyeTip = () => {
+  const getEyeTipContent = () => { // Renamed function for clarity
     const tips = [];
     if (visualAcuityResult === "needs_check") {
       tips.push("For visual acuity: Practice the '20-20-20 rule' – every 20 minutes, look at something 20 feet away for 20 seconds to reduce eye strain. Ensure good lighting when reading or working.");
@@ -131,13 +133,26 @@ const Results: React.FC<ResultsProps> = ({
         text: 'Check your vision with this free online tool!',
         url: window.location.href,
       })
-      .then(() => console.log('Successful share'))
-      .catch((error) => console.log('Error sharing', error));
+      .then(() => {
+        console.log('Successful share dialog opened');
+        setEyeTipUnlocked(true); // Unlock tip if share dialog is successfully opened
+      })
+      .catch((error) => {
+        console.log('Error sharing or user cancelled', error);
+        // Do not unlock if share dialog was cancelled or failed
+      });
     } else {
       // Fallback for browsers that do not support the Web Share API
       navigator.clipboard.writeText(window.location.href)
-        .then(() => alert('Link copied to clipboard! Share this tool with your friends and family.'))
-        .catch((err) => console.error('Could not copy text: ', err));
+        .then(() => {
+          alert('Link copied to clipboard! Share this tool with your friends and family to unlock personalized eye tips.');
+          setEyeTipUnlocked(true); // Unlock tip after copying to clipboard
+        })
+        .catch((err) => {
+          console.error('Could not copy text: ', err);
+          alert('Failed to copy link. Please try sharing manually.');
+          // Do not unlock if copy failed
+        });
     }
   };
 
@@ -184,16 +199,25 @@ const Results: React.FC<ResultsProps> = ({
             <CardTitle className="text-xl font-semibold mb-2 flex items-center text-blue-700 dark:text-blue-300">
               <Lightbulb className="mr-2" /> Eye Tip:
             </CardTitle>
-            <p className="text-blue-800 dark:text-blue-200">{getEyeTip()}</p>
+            {eyeTipUnlocked ? (
+              <p className="text-blue-800 dark:text-blue-200">{getEyeTipContent()}</p>
+            ) : (
+              <div className="text-center">
+                <p className="text-blue-800 dark:text-blue-200 mb-4">
+                  Share this tool with your friends to unlock personalized eye tips!
+                </p>
+                <Button onClick={handleShare} className="w-full max-w-xs bg-purple-600 hover:bg-purple-700 text-white">
+                  <Share2 className="mr-2 h-4 w-4" /> Share with your friends
+                </Button>
+              </div>
+            )}
           </Card>
         </CardContent>
         <div className="flex flex-col items-center p-6 space-y-4">
           <Button onClick={onRetakeTest} className="w-full max-w-xs">
             Retake Test
           </Button>
-          <Button onClick={handleShare} className="w-full max-w-xs bg-purple-600 hover:bg-purple-700 text-white">
-            <Share2 className="mr-2 h-4 w-4" /> Share on Social Media
-          </Button>
+          {/* The main share button is now inside the Eye Tip card when locked, so it's removed from here. */}
           <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
             Help others check their vision too!
           </p>
