@@ -74,7 +74,7 @@ const Index = () => {
           )}
         </div>
         <button
-          onClick={() => setCurrentStep("distanceCalibration")} {/* Changed to new step */}
+          onClick={() => setCurrentStep("distanceCalibration")}
           disabled={!cameraActive}
           className={`mt-8 px-6 py-3 rounded-md text-lg transition-colors ${
             cameraActive ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-400 text-gray-700 cursor-not-allowed"
@@ -257,7 +257,7 @@ const Index = () => {
     <>
       {currentStep === "disclaimer" && <Disclaimer onAgree={handleAgreeToDisclaimer} />}
       {currentStep === "calibration" && <Calibration />}
-      {currentStep === "distanceCalibration" && <DistanceCalibration onProceed={() => setCurrentStep("visualAcuity")} />} {/* New step */}
+      {currentStep === "distanceCalibration" && <DistanceCalibration onProceed={() => setCurrentStep("visualAcuity")} />}
       {currentStep === "visualAcuity" && <VisualAcuityTest />}
       {currentStep === "astigmatism" && <AstigmatismDialTest />}
       {currentStep === "colorVision" && <ColorVisionTest />}
