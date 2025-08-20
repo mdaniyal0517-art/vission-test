@@ -7,11 +7,12 @@ import AstigmatismDial from "@/components/AstigmatismDial";
 import SnellenChart from "@/components/SnellenChart";
 import IshiharaPlate from "@/components/IshiharaPlate";
 import Results from "@/components/Results";
-import DistanceCalibration from "@/components/DistanceCalibration"; // Import the new component
+import DistanceCalibration from "@/components/DistanceCalibration";
+import CameraCalibration from "@/components/CameraCalibration"; // Import the new CameraCalibration component
 import { showSuccess, showError } from "@/utils/toast";
 
 // Define the possible steps in our application flow
-type AppStep = "disclaimer" | "calibration" | "distanceCalibration" | "visualAcuity" | "astigmatism" | "colorVision" | "results";
+type AppStep = "disclaimer" | "cameraCalibration" | "distanceCalibration" | "visualAcuity" | "astigmatism" | "colorVision" | "results";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState<AppStep>("disclaimer");
@@ -20,7 +21,7 @@ const Index = () => {
   const [colorVisionResult, setColorVisionResult] = useState<"normal" | "possible_deficiency" | null>(null);
 
   const handleAgreeToDisclaimer = () => {
-    setCurrentStep("calibration");
+    setCurrentStep("cameraCalibration"); // Changed to cameraCalibration
   };
 
   const handleRetakeTest = () => {
@@ -29,62 +30,6 @@ const Index = () => {
     setVisualAcuityResult(null);
     setAstigmatismResult(null);
     setColorVisionResult(null);
-  };
-
-  const Calibration = () => {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const [cameraActive, setCameraActive] = useState(false);
-
-    useEffect(() => {
-      const enableCamera = async () => {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            setCameraActive(true);
-          }
-        } catch (err) {
-          console.error("Error accessing camera:", err);
-          showError("Failed to access camera. Please grant permission.");
-          setCameraActive(false);
-        }
-      };
-
-      enableCamera();
-
-      return () => {
-        if (videoRef.current && videoRef.current.srcObject) {
-          (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
-        }
-      };
-    }, []);
-
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
-        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Calibration Step</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
-          Please grant camera permission to proceed with the vision check.
-        </p>
-        <div className="w-full max-w-md bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg mb-6 relative">
-          <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto object-cover"></video>
-          {!cameraActive && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-xl">
-              Waiting for camera access...
-            </div>
-          )}
-        </div>
-        <button
-          onClick={() => setCurrentStep("distanceCalibration")}
-          disabled={!cameraActive}
-          className={`mt-8 px-6 py-3 rounded-md text-lg transition-colors ${
-            cameraActive ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-400 text-gray-700 cursor-not-allowed"
-          }`}
-        >
-          {cameraActive ? "Proceed to Distance Calibration" : "Waiting for Camera..."}
-        </button>
-        <MadeWithDyad />
-      </div>
-    );
   };
 
   const VisualAcuityTest = () => {
@@ -256,7 +201,7 @@ const Index = () => {
   return (
     <>
       {currentStep === "disclaimer" && <Disclaimer onAgree={handleAgreeToDisclaimer} />}
-      {currentStep === "calibration" && <Calibration />}
+      {currentStep === "cameraCalibration" && <CameraCalibration onProceed={() => setCurrentStep("distanceCalibration")} />}
       {currentStep === "distanceCalibration" && <DistanceCalibration onProceed={() => setCurrentStep("visualAcuity")} />}
       {currentStep === "visualAcuity" && <VisualAcuityTest />}
       {currentStep === "astigmatism" && <AstigmatismDialTest />}
