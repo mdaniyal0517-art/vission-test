@@ -1,5 +1,6 @@
 import React from 'react';
-import QRCode from 'qrcode.react'; // Reverted to default import
+import * as QRCodeModule from 'qrcode.react';
+const QRCode = (QRCodeModule as any).default || QRCodeModule; // Robust import to handle default or namespace export
 import { Card, CardContent } from "@/components/ui/card";
 
 interface QRCodeDisplayProps {
