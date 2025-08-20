@@ -1,5 +1,5 @@
 import React from 'react';
-import QRCode from 'qrcode.react'; // Changed from named import to default import
+import { QRCode } from 'qrcode.react'; // Changed from default import to named import
 import { Card, CardContent } from "@/components/ui/card";
 
 interface QRCodeDisplayProps {

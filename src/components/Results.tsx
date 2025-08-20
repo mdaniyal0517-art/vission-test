@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { CheckCircle, XCircle, Eye, Palette, Share2, QrCode } from "lucide-react"; // Import icons
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"; // Import Dialog components
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog"; // Import Dialog components and DialogDescription
 import QRCodeDisplay from "./QRCodeDisplay"; // Import the new QR code component
 
 interface ResultsProps {
