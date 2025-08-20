@@ -2,9 +2,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { CheckCircle, XCircle, Eye, Palette, Share2 } from "lucide-react"; // Removed QrCode icon
-// Removed Dialog components and DialogDescription
-// Removed import for QRCodeDisplay
+import { CheckCircle, XCircle, Eye, Palette, Share2, Lightbulb } from "lucide-react"; // Added Lightbulb icon
 
 interface ResultsProps {
   visualAcuityResult: "good" | "needs_check" | null;
@@ -109,6 +107,23 @@ const Results: React.FC<ResultsProps> = ({
     return "Your self-assessment indicates generally good vision. However, this tool is for preliminary self-assessment only and is not a substitute for a professional eye examination. Regular eye check-ups are recommended.";
   };
 
+  const getEyeTip = () => {
+    const tips = [];
+    if (visualAcuityResult === "needs_check") {
+      tips.push("For visual acuity: Practice the '20-20-20 rule' – every 20 minutes, look at something 20 feet away for 20 seconds to reduce eye strain. Ensure good lighting when reading or working.");
+    }
+    if (astigmatismResult === "possible") {
+      tips.push("For astigmatism: If you experience blurry vision or eye strain, especially at night, consider consulting an optometrist. Corrective lenses (glasses or contacts) are typically used to manage astigmatism.");
+    }
+    if (colorVisionResult === "possible_deficiency") {
+      tips.push("For color vision: While color blindness cannot be cured, strategies like using color-coding, labels, and apps that help distinguish colors can be very helpful in daily life.");
+    }
+    if (tips.length === 0) {
+      return "Maintain good eye health by eating a balanced diet rich in vitamins A, C, and E, and omega-3 fatty acids. Protect your eyes from UV light with sunglasses, and take regular breaks from screens.";
+    }
+    return tips.join(" ");
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -164,6 +179,13 @@ const Results: React.FC<ResultsProps> = ({
               {getRecommendation()}
             </p>
           </Card>
+
+          <Card className="p-4 bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 border-l-4">
+            <CardTitle className="text-xl font-semibold mb-2 flex items-center text-blue-700 dark:text-blue-300">
+              <Lightbulb className="mr-2" /> Eye Tip:
+            </CardTitle>
+            <p className="text-blue-800 dark:text-blue-200">{getEyeTip()}</p>
+          </Card>
         </CardContent>
         <div className="flex flex-col items-center p-6 space-y-4">
           <Button onClick={onRetakeTest} className="w-full max-w-xs">
@@ -172,9 +194,6 @@ const Results: React.FC<ResultsProps> = ({
           <Button onClick={handleShare} className="w-full max-w-xs bg-purple-600 hover:bg-purple-700 text-white">
             <Share2 className="mr-2 h-4 w-4" /> Share on Social Media
           </Button>
-
-          {/* Removed Dialog and QRCodeDisplay */}
-
           <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
             Help others check their vision too!
           </p>
