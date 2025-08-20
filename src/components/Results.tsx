@@ -2,9 +2,9 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { CheckCircle, XCircle, Eye, Palette, Share2, QrCode } from "lucide-react"; // Import icons
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog"; // Import Dialog components and DialogDescription
-import QRCodeDisplay from "./QRCodeDisplay"; // Import the new QR code component
+import { CheckCircle, XCircle, Eye, Palette, Share2 } from "lucide-react"; // Removed QrCode icon
+// Removed Dialog components and DialogDescription
+// Removed import for QRCodeDisplay
 
 interface ResultsProps {
   visualAcuityResult: "good" | "needs_check" | null;
@@ -173,24 +173,7 @@ const Results: React.FC<ResultsProps> = ({
             <Share2 className="mr-2 h-4 w-4" /> Share on Social Media
           </Button>
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full max-w-xs bg-gray-600 hover:bg-gray-700 text-white">
-                <QrCode className="mr-2 h-4 w-4" /> Show QR Code
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] p-6">
-              <DialogHeader>
-                <DialogTitle className="text-center text-2xl font-bold">Share with QR Code</DialogTitle>
-                <DialogDescription className="text-center">
-                  Scan this code with your phone to open the app.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex justify-center py-4">
-                <QRCodeDisplay url={window.location.href} size={200} />
-              </div>
-            </DialogContent>
-          </Dialog>
+          {/* Removed Dialog and QRCodeDisplay */}
 
           <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
             Help others check their vision too!
