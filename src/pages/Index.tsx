@@ -6,11 +6,12 @@ import { MadeWithDyad } from "@/components/made-with-dyad";
 import AstigmatismDial from "@/components/AstigmatismDial";
 import SnellenChart from "@/components/SnellenChart";
 import IshiharaPlate from "@/components/IshiharaPlate";
-import Results from "@/components/Results"; // Import the new Results component
+import Results from "@/components/Results";
+import DistanceCalibration from "@/components/DistanceCalibration"; // Import the new component
 import { showSuccess, showError } from "@/utils/toast";
 
 // Define the possible steps in our application flow
-type AppStep = "disclaimer" | "calibration" | "visualAcuity" | "astigmatism" | "colorVision" | "results";
+type AppStep = "disclaimer" | "calibration" | "distanceCalibration" | "visualAcuity" | "astigmatism" | "colorVision" | "results";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState<AppStep>("disclaimer");
@@ -73,13 +74,13 @@ const Index = () => {
           )}
         </div>
         <button
-          onClick={() => setCurrentStep("visualAcuity")}
+          onClick={() => setCurrentStep("distanceCalibration")} {/* Changed to new step */}
           disabled={!cameraActive}
           className={`mt-8 px-6 py-3 rounded-md text-lg transition-colors ${
             cameraActive ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-400 text-gray-700 cursor-not-allowed"
           }`}
         >
-          {cameraActive ? "Proceed to Visual Acuity Test" : "Waiting for Camera..."}
+          {cameraActive ? "Proceed to Distance Calibration" : "Waiting for Camera..."}
         </button>
         <MadeWithDyad />
       </div>
@@ -256,6 +257,7 @@ const Index = () => {
     <>
       {currentStep === "disclaimer" && <Disclaimer onAgree={handleAgreeToDisclaimer} />}
       {currentStep === "calibration" && <Calibration />}
+      {currentStep === "distanceCalibration" && <DistanceCalibration onProceed={() => setCurrentStep("visualAcuity")} />} {/* New step */}
       {currentStep === "visualAcuity" && <VisualAcuityTest />}
       {currentStep === "astigmatism" && <AstigmatismDialTest />}
       {currentStep === "colorVision" && <ColorVisionTest />}

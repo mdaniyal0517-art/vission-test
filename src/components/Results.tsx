@@ -168,7 +168,7 @@ const Results: React.FC<ResultsProps> = ({
             Retake Test
           </Button>
           <Button onClick={handleShare} className="w-full max-w-xs bg-purple-600 hover:bg-purple-700 text-white">
-            <Share2 className="mr-2 h-4 w-4" /> Share This Tool
+            <Share2 className="mr-2 h-4 w-4" /> Share on Social Media
           </Button>
           <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
             Help others check their vision too!
