@@ -8,8 +8,9 @@ import SnellenChart from "@/components/SnellenChart";
 import IshiharaPlate from "@/components/IshiharaPlate";
 import Results from "@/components/Results";
 import DistanceCalibration from "@/components/DistanceCalibration";
-import CameraCalibration from "@/components/CameraCalibration"; // Import the new CameraCalibration component
+import CameraCalibration from "@/components/CameraCalibration";
 import { showSuccess, showError } from "@/utils/toast";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 // Define the possible steps in our application flow
 type AppStep = "disclaimer" | "cameraCalibration" | "distanceCalibration" | "visualAcuity" | "astigmatism" | "colorVision" | "results";
@@ -19,13 +20,13 @@ const Index = () => {
   const [visualAcuityResult, setVisualAcuityResult] = useState<"good" | "needs_check" | null>(null);
   const [astigmatismResult, setAstigmatismResult] = useState<"none" | "possible" | null>(null);
   const [colorVisionResult, setColorVisionResult] = useState<"normal" | "possible_deficiency" | null>(null);
+  const { t } = useTranslation(); // Initialize useTranslation
 
   const handleAgreeToDisclaimer = () => {
-    setCurrentStep("cameraCalibration"); // Changed to cameraCalibration
+    setCurrentStep("cameraCalibration");
   };
 
   const handleRetakeTest = () => {
-    // Reset all states and go back to disclaimer
     setCurrentStep("disclaimer");
     setVisualAcuityResult(null);
     setAstigmatismResult(null);
@@ -35,40 +36,38 @@ const Index = () => {
   const VisualAcuityTest = () => {
     const [currentSnellenIndex, setCurrentSnellenIndex] = useState(0);
 
-    // Fewer letters, faster progression to smaller sizes
     const snellenLetters = [
       { letter: "E", size: "text-[150px]" },
       { letter: "F", size: "text-[100px]" },
       { letter: "P", size: "text-[60px]" },
       { letter: "Z", size: "text-[40px]" },
-      { letter: "D", size: "text-[20px]" }, // Smallest letter
+      { letter: "D", size: "text-[20px]" },
     ];
 
     const handleCanRead = () => {
       if (currentSnellenIndex < snellenLetters.length - 1) {
         setCurrentSnellenIndex(prev => prev + 1);
-        showSuccess("Good! Let's try a smaller one.");
+        showSuccess(t("good_acuity_toast"));
       } else {
-        // User read the smallest letter
-        showSuccess("Excellent! You've completed the visual acuity test.");
+        showSuccess(t("excellent_acuity_toast"));
         setVisualAcuityResult("good");
         setCurrentStep("astigmatism");
       }
     };
 
     const handleCannotRead = () => {
-      showError("It seems you're having difficulty. This may indicate a need for vision correction.");
+      showError(t("difficulty_acuity_toast"));
       setVisualAcuityResult("needs_check");
-      setCurrentStep("astigmatism"); // Move to next test regardless
+      setCurrentStep("astigmatism");
     };
 
     const currentLetter = snellenLetters[currentSnellenIndex];
 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
-        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Visual Acuity Test</h1>
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">{t('visual_acuity_title')}</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-          Can you clearly read the letter below?
+          {t('visual_acuity_instruction')}
         </p>
 
         <div className="my-8">
@@ -80,13 +79,13 @@ const Index = () => {
             onClick={handleCanRead}
             className="px-6 py-3 bg-green-600 text-white rounded-md text-lg hover:bg-green-700 transition-colors"
           >
-            Yes, I can read it
+            {t('yes_can_read')}
           </button>
           <button
             onClick={handleCannotRead}
             className="px-6 py-3 bg-red-600 text-white rounded-md text-lg hover:bg-red-700 transition-colors"
           >
-            No, I can't read it
+            {t('no_cannot_read')}
           </button>
         </div>
         <MadeWithDyad />
@@ -96,22 +95,22 @@ const Index = () => {
 
   const AstigmatismDialTest = () => {
     const handleLinesDifferent = () => {
-      showError("It seems you might have astigmatism. Please consult an eye care professional.");
+      showError(t("possible_astigmatism_toast"));
       setAstigmatismResult("possible");
       setCurrentStep("colorVision");
     };
 
     const handleLinesSame = () => {
-      showSuccess("Great! Your astigmatism test indicates no significant issues.");
+      showSuccess(t("no_astigmatism_toast"));
       setAstigmatismResult("none");
       setCurrentStep("colorVision");
     };
 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
-        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Astigmatism Dial Test</h1>
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">{t('astigmatism_title')}</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-          Focus on the center. Do any lines appear darker or clearer than others?
+          {t('astigmatism_instruction')}
         </p>
         <AstigmatismDial />
         <div className="flex space-x-4 mt-8">
@@ -119,13 +118,13 @@ const Index = () => {
             onClick={handleLinesDifferent}
             className="px-6 py-3 bg-red-600 text-white rounded-md text-lg hover:bg-red-700 transition-colors"
           >
-            Yes, some lines are darker/clearer
+            {t('lines_different')}
           </button>
           <button
             onClick={handleLinesSame}
             className="px-6 py-3 bg-green-600 text-white rounded-md text-lg hover:bg-green-700 transition-colors"
           >
-            No, all lines look the same
+            {t('lines_same')}
           </button>
         </div>
         <MadeWithDyad />
@@ -138,34 +137,32 @@ const Index = () => {
     const [inputValue, setInputValue] = useState("");
     const [incorrectAnswersCount, setIncorrectAnswersCount] = useState(0);
 
-    // Ishihara plates data with increasing difficulty
     const ishiharaPlates = [
-      { id: 1, correctAnswer: "29", numberForSvg: "29" }, // Medium
-      { id: 2, correctAnswer: "74", numberForSvg: "74" }, // Medium
-      { id: 3, correctAnswer: "5", numberForSvg: "5" },   // Harder
-      { id: 4, correctAnswer: "15", numberForSvg: "15" }, // Very Hard
+      { id: 1, correctAnswer: "29", numberForSvg: "29" },
+      { id: 2, correctAnswer: "74", numberForSvg: "74" },
+      { id: 3, correctAnswer: "5", numberForSvg: "5" },
+      { id: 4, correctAnswer: "15", numberForSvg: "15" },
     ];
 
     const handleAnswerSubmit = () => {
       const currentPlate = ishiharaPlates[currentPlateIndex];
       if (inputValue.trim() === currentPlate.correctAnswer) {
-        showSuccess("Correct! Moving to the next plate.");
+        showSuccess(t("correct_answer_toast"));
       } else {
-        showError(`Incorrect. The correct answer was ${currentPlate.correctAnswer}.`);
+        showError(t("incorrect_answer_toast", { correctAnswer: currentPlate.correctAnswer }));
         setIncorrectAnswersCount(prev => prev + 1);
       }
 
       if (currentPlateIndex < ishiharaPlates.length - 1) {
         setCurrentPlateIndex(prev => prev + 1);
-        setInputValue(""); // Clear input for next plate
+        setInputValue("");
       } else {
-        // All plates completed
-        if (incorrectAnswersCount > 1) { // If 2 or more incorrect answers out of 4 plates
+        if (incorrectAnswersCount > 1) {
           setColorVisionResult("possible_deficiency");
-          showError("You've completed the color vision test with several incorrect answers.");
+          showError(t("color_vision_completed_deficiency_toast"));
         } else {
           setColorVisionResult("normal");
-          showSuccess("You've completed the color vision test!");
+          showSuccess(t("color_vision_completed_normal_toast"));
         }
         setCurrentStep("results");
       }
@@ -175,23 +172,23 @@ const Index = () => {
 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
-        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Color Vision Test</h1>
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">{t('color_vision_title')}</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-          What number do you see in the image below? (Plate {currentPlateIndex + 1} of {ishiharaPlates.length})
+          {t('color_vision_instruction', { current: currentPlateIndex + 1, total: ishiharaPlates.length })}
         </p>
 
         <IshiharaPlate
           plateNumber={currentPlate.id}
           onAnswerChange={setInputValue}
           inputValue={inputValue}
-          correctAnswerForSvg={currentPlate.numberForSvg} // Pass the number for SVG
+          correctAnswerForSvg={currentPlate.numberForSvg}
         />
 
         <button
           onClick={handleAnswerSubmit}
           className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-md text-lg hover:bg-blue-700 transition-colors"
         >
-          Submit Answer
+          {t('submit_answer_button')}
         </button>
         <MadeWithDyad />
       </div>
