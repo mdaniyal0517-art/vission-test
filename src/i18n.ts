@@ -5,6 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // Import translation files
 import enTranslation from './locales/en/translation.json';
 import esTranslation from './locales/es/translation.json';
+import urTranslation from './locales/ur/translation.json'; // Import Urdu translation
 
 i18n
   .use(LanguageDetector) // Detect user language
@@ -16,6 +17,9 @@ i18n
       },
       es: {
         translation: esTranslation
+      },
+      ur: { // Add Urdu resources
+        translation: urTranslation
       }
     },
     fallbackLng: "en", // Fallback language if user language is not available

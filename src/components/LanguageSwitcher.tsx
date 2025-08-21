@@ -22,6 +22,7 @@ const LanguageSwitcher: React.FC = () => {
         <SelectContent>
           <SelectItem value="en">English</SelectItem>
           <SelectItem value="es">Español</SelectItem>
+          <SelectItem value="ur">اردو</SelectItem> {/* Added Urdu option */}
         </SelectContent>
       </Select>
     </div>
