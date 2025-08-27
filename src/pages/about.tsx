@@ -1,16 +1,8 @@
 import React from "react";
 
-const About: React.FC = () => {
+const About = () => {
   return (
-    <div
-      style={{
-        maxWidth: "800px",
-        margin: "50px auto",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-        lineHeight: 1.6,
-      }}
-    >
+    <div style={{ maxWidth: "800px", margin: "50px auto", padding: "20px", fontFamily: "Arial, sans-serif", lineHeight: 1.6 }}>
       <h1>About EyeVision Tool</h1>
       <p>
         Welcome to <strong>EyeVision Tool</strong> – an easy-to-use online vision testing tool designed for everyone. 
@@ -38,6 +30,7 @@ const About: React.FC = () => {
 };
 
 export default About;
+
 
 
 
