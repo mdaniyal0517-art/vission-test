@@ -3,10 +3,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import Index from "./Index";
+import NotFound from "./NotFound";
 import { I18nextProvider } from "react-i18next"; // Import I18nextProvider
-import i18n from "./i18n"; // Import your i18n configuration
+import i18n from "../i18n"; // Import your i18n configuration
 
 const queryClient = new QueryClient();
 
