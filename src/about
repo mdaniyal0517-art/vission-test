@@ -1,0 +1,35 @@
+import React from "react";
+
+const About = () => {
+  return (
+    <div style={{ maxWidth: "800px" max-width: 800px;  margin: "50px auto"  padding: "20px"  fontFamily: "Arial, sans-serif", lineHeight: "1.6" }}>
+      <h1>About EyeVision Tool</h1>
+      <p>
+        Welcome to <strong>EyeVision Tool</strong> – an easy-to-use online vision testing tool designed for everyone. 
+        Our mission is to make basic vision checking accessible from the comfort of your home.
+      </p>
+      <p>
+        This tool helps users with simple eye tests like Ishihara Color Test and other vision-based assessments. 
+        Please note, this tool is not a replacement for a professional eye examination. 
+        We recommend consulting a certified eye specialist for complete checkups.
+      </p>
+      <p>
+        At EyeVision Tool, we are constantly improving features to make vision screening simple, fast, and reliable.
+      </p>
+      <h2>Why Choose EyeVision Tool?</h2>
+      <ul>
+        <li>Quick and user-friendly tests</li>
+        <li>Accessible on any device</li>
+        <li>Free to use for everyone</li>
+      </ul>
+      <p>
+        Thank you for visiting EyeVision Tool. We are glad to be part of your journey towards better vision awareness.
+      </p>
+    </div>
+  );
+};
+
+export default About;
+
+
+
